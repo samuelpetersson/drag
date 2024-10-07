@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<title>Drag</title>
+	<link rel="stylesheet" href="https://samuelpetersson.github.io/style.css">
+
+
+	<style>
+		.demo {
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			position: relative;
+			background: #eee;
+			overflow: hidden;
+		}
+
+		.demo-origin {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+		}
+
+		.demo-ball {
+			background: #000000;
+			width: 40px;
+			height: 40px;
+			border-radius: 20px;
+			position: absolute;
+			margin-left: -20px;
+			margin-top: -20px;
+			cursor: grab;
+		}
+
+		.demo-ball[data-drag-state="began"],
+		.demo-ball[data-drag-state="moved"] {
+			user-select: none;
+			cursor: grabbing;
+			transform: scale(1.1);
+		}
+
+		body[data-drag-state="moved"] {
+			cursor: grabbing;
+		}
+	</style>
+
+	<script src="index.js"></script>
+</head>
+
+<body>
+
+	<main>
+
+		<header>
+			<h1>Drag</h1>
+			<p>
+				<a href="https://github.com/samuelpetersson/drag">Source</a>
+			</p>
+		</header>
+
+
+		<article>
+			<h2>Velocity</h2>
+			<div class="demo" id="demo1">
+				<div class="demo-origin">
+					<div class="demo-ball" id="demo1-ball"></div>
+				</div>
+			</div>
+
+			<script>
+				(function ({ createGesture }, target) {
+					const pos = { x: 0, y: 0 }
+
+					createGesture({ target }, (state, vel) => {
+						target.setAttribute("data-drag-state", state)
+						document.body.setAttribute("data-drag-state", state)
+
+						if (state == "moved") {
+							pos.x += vel.x
+							pos.y += vel.y
+							target.style.left = `${pos.x}px`
+							target.style.top = `${pos.y}px`
+						}
+
+					})
+
+				})(drag, document.getElementById("demo1-ball"))
+			</script>
+
+			
+
+		</article>
+
+		<article>
+			<h2>Horizontal</h2>
+			
+			<div class="demo" id="demo2">
+				<div class="demo-origin">
+					<div class="demo-ball" id="demo2-ball"></div>
+				</div>
+			</div>
+			<script>
+					(function ({ createGesture }, target) {
+						const pos = { x: 0, y: 0 }
+
+
+						createGesture({ target, direction: "horizontal" }, (state, vel) => {
+							target.setAttribute("data-drag-state", state)
+							document.body.setAttribute("data-drag-state", state)
+
+							if (state == "moved") {
+								pos.x += vel.x
+								target.style.left = `${pos.x}px`
+							}
+
+						})
+
+					})(drag, document.getElementById("demo2-ball"))
+			</script>	
+		</article>
+
+
+	</main>
+
+</body>
+
+</html>
